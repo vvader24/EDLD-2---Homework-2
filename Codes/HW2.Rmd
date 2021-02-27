@@ -35,6 +35,30 @@ country_codes <- countrycode::codelist %>%
 
 # Question 1
 ```{r}
+transit_cost <- left_join(transit_cost, country_codes, by = "country")
 
+transit_cost_by_c <- transit_cost %>% 
+  select(country_name, real_cost) %>% 
+  drop_na() %>% 
+  mutate(country_name = factor(country_name),
+         real_cost = as.numeric(real_cost)) %>%
+  drop_na() %>% 
+  group_by(country_name) %>% 
+  summarize(mean_cost = mean(real_cost),
+            se_cost = sd(real_cost)/sqrt(n())) %>% 
+  arrange(desc(mean_cost))
+
+transit_cost_by_c %>%
+  mutate(country_name = fct_reorder(country_name, mean_cost)) %>% 
+ggplot(aes(country_name, mean_cost)) +
+geom_errorbar(aes(ymin = mean_cost + qnorm(0.025)*se_cost,
+ymax = mean_cost + qnorm(0.975)*se_cost)) +
+geom_point(color = "cornflower blue") +
+coord_flip()+
+  theme_minimal()+
+  labs(x = "Country",
+       y = "Real Cost (In millions of dollars)",
+       title = "Cost to build transit systems vary across countries",
+       caption = "Data provided through #tidytuesday by the Transit Costs Project")
 ```
 
