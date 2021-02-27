@@ -1,0 +1,29 @@
+---
+title: "Homework 2"
+author: "Raleigh Goodwin, Kavya Mudiam, Vinita Vader, Zach Shroeder, Ann-Marie Barrett"
+"
+date: "2/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(colorspace)
+library(ggplot2)
+
+transit_cost <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-05/transit_cost.csv')
+
+#install.packages("tidytuesdayR")
+#transit_cost <- tidytuesdayR::tt_load(2021, week = 2)
+crime <- rio::import("~/Dropbox (University of Oregon)/My Mac (Tests-Air.domain)/Desktop/UO/Year 2/Winter/EDLD 626/crime.csv")
+
+#install.packages("countrycode")
+country_codes <- countrycode::codelist %>% 
+  select(country_name = country.name.en, country = ecb)
+```
+
