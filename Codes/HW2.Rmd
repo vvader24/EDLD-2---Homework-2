@@ -48,8 +48,11 @@ transit_cost_by_c <- transit_cost %>%
             se_cost = sd(real_cost)/sqrt(n())) %>% 
   arrange(desc(mean_cost))
 
-vertical.lines <- c(0,15000, 30000,45000,60000,75000)
-
+vertical.lines = c(0,15000, 30000,45000,60000,75000)
+df = tibble(x.axis.label =c("0","15,000","30,000","45,000","60,000","75,000"),
+x = rep(0,6),
+y = c(0,15000, 30000,45000,60000,75000)
+)
 transit_cost_by_c %>%
   mutate(country_name = fct_reorder(country_name, mean_cost)) %>% 
 ggplot(aes(country_name, mean_cost)) +
@@ -57,6 +60,7 @@ geom_errorbar(aes(ymin = mean_cost + qnorm(0.025)*se_cost,
 ymax = mean_cost + qnorm(0.975)*se_cost),
 color="#636363") +
 geom_point(color = "cornflower blue") +
+  scale_y_continuous(breaks = c(0,15000,30000,45000,60000,75000), labels = c("0","15,000","30,000","45,000","60,000","75,000"))+
 coord_flip()+
   labs(x = "Country",
        y = "Real Cost (In millions of dollars)",
@@ -65,9 +69,9 @@ coord_flip()+
   theme_minimal()+
    theme(panel.grid.major = element_blank(),
          panel.grid.minor = element_blank(),
-         strip.text.y = element_blank())+
+         plot.title = element_text(hjust = -.95),
+         plot.caption = element_text(hjust = 0.5))+
   geom_hline(yintercept = vertical.lines, color="grey80")
-
-
+  
 ```
 
