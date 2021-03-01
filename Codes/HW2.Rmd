@@ -62,3 +62,33 @@ coord_flip()+
        caption = "Data provided through #tidytuesday by the Transit Costs Project")
 ```
 
+
+#Question 2
+```{r}
+p<- transit_cost_by_c %>%
+  mutate(country_name = fct_reorder(country_name, mean_cost)) %>% 
+ggplot(aes(country_name, mean_cost)) +
+geom_errorbar(aes(ymin = mean_cost + qnorm(0.025)*se_cost,
+ymax = mean_cost + qnorm(0.975)*se_cost,
+color = "95%"),
+width = 0.2,
+                size = 0.4) + 
+  geom_errorbar(aes(ymin = mean_cost + qnorm(0.05)*se_cost,
+                    ymax = mean_cost + qnorm(0.95)*se_cost,
+                    color = "90%"),
+                width = 0.2,
+                size = 0.6) + 
+  geom_errorbar(aes(ymin = mean_cost + qnorm(0.1)*se_cost,
+                    ymax = mean_cost + qnorm(0.9)*se_cost,
+                    color = "80%"),
+                width = 0.2,
+                size = 0.8)
+
+p + scale_color_manual("Confidence Interval",
+                     values = c("#4375D3",
+                                lighten("#4375D3", .3),
+                                lighten("#4375D3", .6))) +
+  geom_point(size = 0.6) +
+  coord_flip() 
+
+```
