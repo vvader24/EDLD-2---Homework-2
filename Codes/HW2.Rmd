@@ -128,10 +128,6 @@ q4$district_id <- factor(q4$district_id,
 
 # CREATING SUMMARY TABLE
 
-q4 %>% 
-  dplyr::group_by(reported_date, district_id, offense_category_id) %>% 
-  dplyr::summarise(n = n())
-
 sumtab <- q4 %>% 
   count(district_id,offense_category_id, reported_date) %>% 
   pivot_wider(names_from = "reported_date", 
@@ -152,7 +148,7 @@ sumtab %>%
     subtitle = "Sample of three districts"
   ) %>% 
   tab_style(style = cell_text(style = "italic"),
-            locations = cells_title(groups = "subtitle"))
+            locations = cells_title(groups = "subtitle")) %>% 
   tab_source_note(
     source_note = md("Denver Crime Data Distributed via [Kaggle](https://www.kaggle.com/paultimothymooney/denver-crime-data)")
   )
