@@ -97,3 +97,20 @@ p + scale_color_manual("Confidence Interval",
        caption = "Data provided through #tidytuesday by the Transit Costs Project")
 
 ```
+
+#Question 3
+```{r}
+model_data <- crime %>% 
+  mutate(neighborhood_id = relevel(factor(neighborhood_id), ref = "barnum"))
+
+m <- glm(is_crime ~ neighborhood_id, 
+         data = model_data,
+         family = "binomial")
+
+tidied <- broom::tidy(m)
+
+ppoints(20)
+
+
+```
+
