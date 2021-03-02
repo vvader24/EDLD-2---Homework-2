@@ -125,7 +125,8 @@ discrete$diff <- ifelse(discrete$x > 0, "seagreen3", "mediumpurple")
 ggplot(discrete, aes(x)) +
   geom_dotplot(aes(fill = diff), binwidth = .031) +
   labs(caption = "Each ball represents 5% probability",
-       title = "Probability of differential crime rates between neighborhoods: Barnum-West compared to Barnum",
+       title = "Probability of differential crime rates between neighborhoods",
+       subtitle = "Barnum-West compared to Barnum",
        x = "Difference in log odds of a crime being committed") +
   theme_minimal()+
     theme(legend.position = "none") +
