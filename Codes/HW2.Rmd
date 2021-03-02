@@ -19,6 +19,7 @@ library(here)
 library(janitor)
 library(lubridate)
 library(rio)
+library(ggtext)
 
 transit_cost <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-05/transit_cost.csv')
 
@@ -125,8 +126,11 @@ discrete$diff <- ifelse(discrete$x > 0, "seagreen3", "mediumpurple")
 ggplot(discrete, aes(x)) +
   geom_dotplot(aes(fill = diff), binwidth = .031) +
   labs(caption = "Each ball represents 5% probability",
-       title = "Probability of differential crime rates between neighborhoods",
-       subtitle = "Barnum-West compared to Barnum",
+       title = "Probability of differential crime rates between neighborhoods <br>
+       <span style='color:seagreen3;font-size:12pt'>**Barnum-West**</span>
+       <span style='color:black;font-size:12pt'>compared to</span>
+       <span style='color:mediumpurple;font-size:12pt'>**Barnum**</span>
+       </span>", # i'm pretty sure i color coded correctly here but @AM can you check
        x = "Difference in log odds of a crime being committed") +
   theme_minimal()+
     theme(legend.position = "none") +
@@ -137,7 +141,8 @@ ggplot(discrete, aes(x)) +
     xintercept = 0, 
     color = "red",
     linetype = 1,
-    size = 1.4)
-)
+    size = 1.4) +
+  theme(plot.title = element_markdown())
+
 ```
 
