@@ -25,7 +25,7 @@ transit_cost <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidy
 
 #install.packages("tidytuesdayR")
 #transit_cost <- tidytuesdayR::tt_load(2021, week = 2)
-crime = import(here("Data/crime.csv"), setclass = "tb_df") %>% 
+crime <- import(here("Data/crime.csv"), setclass = "tb_df") %>% 
   characterize() %>% 
   clean_names()
 
