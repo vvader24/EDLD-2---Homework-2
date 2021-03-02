@@ -131,7 +131,9 @@ q4$district_id <- factor(q4$district_id,
 sumtab <- q4 %>% 
   count(district_id,offense_category_id, reported_date) %>% 
   pivot_wider(names_from = "reported_date", 
-              values_from = "n") 
+              values_from = "n")
+
+sumtab[is.na(sumtab)] = 0
 
 # GT TABLE CODE
 
