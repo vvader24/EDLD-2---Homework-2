@@ -86,9 +86,14 @@ width = 0.2,
 
 p + scale_color_manual("Confidence Interval",
                      values = c("#4375D3",
-                                lighten("#4375D3", .3),
-                                lighten("#4375D3", .6))) +
+                                lighten("#4375D3", .4),
+                                lighten("#4375D3", .7))) +
   geom_point(size = 0.6) +
-  coord_flip() 
+  coord_flip() +
+  theme_minimal() +
+  labs(x = "Country",
+       y = "Real Cost (In millions of dollars)",
+       title = "Cost to build transit systems vary across countries",
+       caption = "Data provided through #tidytuesday by the Transit Costs Project")
 
 ```
