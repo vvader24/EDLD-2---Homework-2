@@ -148,7 +148,6 @@ ggplot(discrete, aes(x)) +
 
 ```
 
-```
 
 # Question 4
 
@@ -208,6 +207,5 @@ sumtab %>%
   tab_source_note(
     source_note = md("Denver Crime Data Distributed via [Kaggle](https://www.kaggle.com/paultimothymooney/denver-crime-data)")
   )
-
 
 ```
