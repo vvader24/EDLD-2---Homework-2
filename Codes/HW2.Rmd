@@ -1,9 +1,10 @@
 ---
 title: "Homework 2"
 author: "Raleigh Goodwin, Kavya Mudiam, Vinita Vader, Zach Shroeder, Ann-Marie Barrett"
-"
 date: "2/27/2021"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -19,6 +20,7 @@ library(here)
 library(janitor)
 library(lubridate)
 library(rio)
+library(gt)
 library(ggtext)
 
 transit_cost <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-05/transit_cost.csv')
@@ -146,3 +148,66 @@ ggplot(discrete, aes(x)) +
 
 ```
 
+```
+
+# Question 4
+
+```{r}
+# CREATING DATA FRAME/DATA MANIPULATION
+
+q4 <- crime %>% 
+  filter(district_id == 1 | district_id == 3 | district_id == 5) %>% 
+  filter(offense_category_id == "aggravated-assault" |
+           offense_category_id == "other-crimes-against-persons" |
+           offense_category_id == "sexual-assault" |
+           offense_category_id == "murder")
+
+q4$reported_date <- mdy_hms(q4$reported_date)
+q4$reported_date <- as.Date(q4$reported_date)
+q4$reported_date <- format(q4$reported_date, "%Y")
+q4$offense_category_id <- factor(q4$offense_category_id,
+                                 levels = c("aggravated-assault",
+                                            "sexual-assault",
+                                            "murder",
+                                            "other-crimes-against-persons"),
+                                 labels = c("Aggravated Assault",
+                                            "Sexual Assault",
+                                            "Murder",
+                                 "Other Crimes Against Persons"))
+
+q4$district_id <- factor(q4$district_id,
+                                 labels = c("District 1",
+                                            "District 3",
+                                            "District 5"))
+
+# CREATING SUMMARY TABLE
+
+sumtab <- q4 %>% 
+  count(district_id,offense_category_id, reported_date) %>% 
+  pivot_wider(names_from = "reported_date", 
+              values_from = "n")
+
+sumtab[is.na(sumtab)] = 0
+
+# GT TABLE CODE
+
+sumtab %>% 
+  group_by(district_id) %>% 
+  gt() %>% 
+  tab_spanner(label = "Year",
+              columns = vars('2016', '2017', '2018', '2019', '2020', '2021')) %>%
+  cols_label(offense_category_id = "Offense") %>% 
+  cols_align(align = "left",
+             columns = vars(offense_category_id)) %>% 
+  tab_header(
+    title = "Crimes Against Persons in Denver: 2014 to Present",
+    subtitle = "Sample of three districts"
+  ) %>% 
+  tab_style(style = cell_text(style = "italic"),
+            locations = cells_title(groups = "subtitle")) %>% 
+  tab_source_note(
+    source_note = md("Denver Crime Data Distributed via [Kaggle](https://www.kaggle.com/paultimothymooney/denver-crime-data)")
+  )
+
+
+```
