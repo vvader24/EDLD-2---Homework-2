@@ -13,9 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
-library(dplyr)
+#library(dplyr) # loaded by tidyverse
 library(colorspace)
-library(ggplot2)
+#library(ggplot2) # loaded by tidyverse
 library(here)
 library(janitor)
 library(lubridate)
@@ -37,7 +37,7 @@ country_codes <- countrycode::codelist %>%
 ```
 
 # Question 1
-```{r}
+```{r fig.height = 7}
 transit_cost <- left_join(transit_cost, country_codes, by = "country")
 
 transit_cost_by_c <- transit_cost %>% 
@@ -63,18 +63,20 @@ coord_flip()+
        y = "Real Cost (In millions of dollars)",
        title = "Cost to build transit systems vary across countries",
        caption = "Data provided through #tidytuesday by the Transit Costs Project")
+
+# Note I made the figure height a bit larger so it fits better
 ```
 
 
 #Question 2
-```{r}
-p<- transit_cost_by_c %>%
+```{r, fig.height = 7}
+p <- transit_cost_by_c %>%
   mutate(country_name = fct_reorder(country_name, mean_cost)) %>% 
-ggplot(aes(country_name, mean_cost)) +
-geom_errorbar(aes(ymin = mean_cost + qnorm(0.025)*se_cost,
-ymax = mean_cost + qnorm(0.975)*se_cost,
-color = "95%"),
-width = 0.2,
+  ggplot(aes(country_name, mean_cost)) +
+  geom_errorbar(aes(ymin = mean_cost + qnorm(0.025)*se_cost,
+                    ymax = mean_cost + qnorm(0.975)*se_cost,
+                    color = "95%"),
+                width = 0.2,
                 size = 0.4) + 
   geom_errorbar(aes(ymin = mean_cost + qnorm(0.05)*se_cost,
                     ymax = mean_cost + qnorm(0.95)*se_cost,
@@ -99,10 +101,11 @@ p + scale_color_manual("Confidence Interval",
        title = "Cost to build transit systems vary across countries",
        caption = "Data provided through #tidytuesday by the Transit Costs Project")
 
+# looks great!
 ```
 
 #Question 3
-```{r}
+```{r }
 model_data <- crime %>% 
   mutate(neighborhood_id = relevel(factor(neighborhood_id), ref = "barnum"))
 
@@ -146,6 +149,7 @@ ggplot(discrete, aes(x)) +
     size = 1.4) +
   theme(plot.title = element_markdown())
 
+# Looks great! Really well done.
 ```
 
 
@@ -160,6 +164,8 @@ q4 <- crime %>%
            offense_category_id == "other-crimes-against-persons" |
            offense_category_id == "sexual-assault" |
            offense_category_id == "murder")
+
+# I would put all these in a call to `mutate()`
 
 q4$reported_date <- mdy_hms(q4$reported_date)
 q4$reported_date <- as.Date(q4$reported_date)
@@ -186,6 +192,9 @@ sumtab <- q4 %>%
   pivot_wider(names_from = "reported_date", 
               values_from = "n")
 
+# Instead of the below, use `mutate()` with `replace_na()`
+# see https://tidyr.tidyverse.org/reference/replace_na.html
+
 sumtab[is.na(sumtab)] = 0
 
 # GT TABLE CODE
@@ -208,4 +217,5 @@ sumtab %>%
     source_note = md("Denver Crime Data Distributed via [Kaggle](https://www.kaggle.com/paultimothymooney/denver-crime-data)")
   )
 
+# Looks perfect!
 ```
